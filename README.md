@@ -1,4 +1,7 @@
 imgurUpload
 ===========
 
-OO PHP wrapper for a simple anonymous imgur upload
+####Object Oriented PHP wrapper for anonymous and simple uploading of images to Imgur
+
+
+
