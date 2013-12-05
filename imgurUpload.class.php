@@ -62,7 +62,7 @@ class imgurUpload {
 
 
 
-$imageArray = array( 'images' => 
+/* $imageArray = array( 'images' => 
 					  array( 'name' => 'test.jpg',
 						     'type' => 'image/jpeg',
 						     'tmp_name' => '/tmp/nsl54Gs',
@@ -76,7 +76,7 @@ $args = array('png','jpeg','jpg','gif');
 $mimes = $upload->set_MIME_types($args);
 $upload->check_MIME_types($mimes);
 
-//var_dump($mimes);
+//var_dump($mimes); */
 
 
 ?>
