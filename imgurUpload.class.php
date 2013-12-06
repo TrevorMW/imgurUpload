@@ -8,7 +8,7 @@
 
 class imgurUpload {
 	
-	public $imgurKey;
+	public $clientKey;
 	public $imageObj;
 	public $imgurError;
 	public $allowableMimes;
@@ -20,63 +20,69 @@ class imgurUpload {
 	}
 	
 	function set_key( $key ){
-		$this->imgurKey = $key; // Set Imgur API Key (Basic Access)
+		$this->clientKey = $key; // Set Imgur API Key (Basic Access)
 	}
 	
 	function set_MIME_types( $mimeTypes = array() ){
-		//Check array to see if therre are any
-		if( !empty( $mimeTypes ) && is_array( $mimeTypes ) ){
+		
+		if( !empty( $mimeTypes ) && is_array( $mimeTypes ) ){ //make sure array is present and it has at least one value
+			
 		  $this->allowableMimes = $mimeTypes; // Set allowed file types array to public variable
-		  return $this->allowableMimes;		
+		  
+		  return $this->allowableMimes;	
+		  	
 		} else {
+			
 		  return false;	
+		  
 		}
+		
 	}
 	
-	function check_MIME_types( $allowableMimes = array() ){
+	function check_MIME_type( $allowableMimes = array() ){
+		
 		$imageMime = $this->imageObj; // Get class object
+		
 		$imageMime = str_replace( 'image/','',$imageMime->type ); // Get image mime type extension
+		
 		if( in_array( $imageMime, $allowableMimes ) ){ // Check for MIME type extension in array of allowed file types
+		
 			return true; // if file extension is allowed, proceed
+			
 		} else {
-			return false; // if file extension is not allowed, stop		
+			
+			return false; // if file extension is not allowed, stop	
+				
+		}
+		
+	}
+	
+	function encode_image_data($image){ 
+		
+		//return base64_encode(file_get_contents($image));
+		
+	}
+	
+	function set_curl_options( $curlHandle, $options = array() ){
+		
+		if( !empty( $options ) && is_array( $options )){
+		
+			foreach($options as $k => $option){
+								
+				curl_setopt( $curlHandle, $k, $option);
+				 
+			}
+			
+		} else {
+			
+			return false;
+		
 		}
 	}
-	
-	function set_curl_options(){
-		
-		
-	}
-	
-	function initiate_request(){
-		
-		
-		
-	}
-
-
 
 }
 
 
-
-
-
-/* $imageArray = array( 'images' => 
-					  array( 'name' => 'test.jpg',
-						     'type' => 'image/jpeg',
-						     'tmp_name' => '/tmp/nsl54Gs',
-						     'error' => 0,
-						     'size' => 1715 )
-				   );
-									   
-$upload = new imgurUpload($imageArray);
-$upload->set_key('9c616d70834d15a');
-$args = array('png','jpeg','jpg','gif');
-$mimes = $upload->set_MIME_types($args);
-$upload->check_MIME_types($mimes);
-
-//var_dump($mimes); */
 
 
 ?>
