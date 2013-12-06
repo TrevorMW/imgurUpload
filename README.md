@@ -12,8 +12,8 @@ imgurUpload can be used by anyone running a modern PHP server. The requirements 
 
 ###### What is the goal of imgurUpload?
 imgurUpload is a solution for cURL-based anonymous uploads to imgur's image API 
-endpoint. This goal of this PHP class is to provide an easy set of methods to 
-allow users to upload images, and receive a imgur URL in response. 
+endpoint. The goal of this PHP class is to provide an easy set of methods to 
+allow users to upload images, and receive a imgur URL in a properly formatted JSON response. 
 
 
 
