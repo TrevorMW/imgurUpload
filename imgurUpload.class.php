@@ -8,79 +8,103 @@
 
 class imgurUpload {
 	
-	public $clientKey;
-	public $imageObj;
-	public $imgurError;
-	public $allowableMimes;
+	public $client_id;
+	public static $imgur_endpoint = 'https://api.imgur.com/3/upload.json';
+	public $image_attr;
+	public $allowed_mime_types;
+	public $max_image_size;
 
-	public function __construct( $fileArray = array() ){ 
-		$file = $fileArray['images']; // Bind images array to new variable
-		$obj = (object) $file; // Cast array to a new object
-		$this->imageObj = $obj; // Bind to public variable
-	}
-	
-	function set_key( $key ){
-		$this->clientKey = $key; // Set Imgur API Key (Basic Access)
-	}
-	
-	function set_MIME_types( $mimeTypes = array() ){
+
+	public function __construct(){ 
 		
-		if( !empty( $mimeTypes ) && is_array( $mimeTypes ) ){ //make sure array is present and it has at least one value
-			
-		  $this->allowableMimes = $mimeTypes; // Set allowed file types array to public variable
-		  
-		  return $this->allowableMimes;	
-		  	
+	}
+	
+	
+	/**
+	 * Imgur Client ID 
+	 * 
+	 * Calling this method sets Imgur Client Id for basic request
+	 *  
+	 * @param str $id
+	 *    client id received from registering an application with imgur
+	 *
+	 * @throws
+	 *         	 
+	 */
+	public function set_client_key( $id ){
+		$matchId = preg_match( '/^[A-Za-z0-9]*$/', $id ); 
+		if( !empty( $id ) && $matchId >= 1 ){ 
+			$this->client_id = $id;
 		} else {
-			
-		  return false;	
-		  
+			throw new Exception("client id contains a non-alphanumeric character");	
 		}
-		
 	}
 	
-	function check_MIME_type( $allowableMimes = array() ){
-		
-		$imageMime = $this->imageObj; // Get class object
-		
-		$imageMime = str_replace( 'image/','',$imageMime->type ); // Get image mime type extension
-		
-		if( in_array( $imageMime, $allowableMimes ) ){ // Check for MIME type extension in array of allowed file types
-		
-			return true; // if file extension is allowed, proceed
-			
-		} else {
-			
-			return false; // if file extension is not allowed, stop	
+	
+	/**
+	 * Image attributes array
+	 * 
+	 * Passing this method an array of image attributes will set all properties to an object
+	 *  
+	 * @param array $imgattr
+	 *    This can be an array from a multipart form, or an array built from a form that accepts a URL and image details
+	 *         	 
+	 */
+	public function set_image_attributes( $imgattr = array() ){
+	
+		$this->image_attr = (object) $imgattr;
 				
-		}
-		
 	}
 	
-	function encode_image_data($image){ 
-		
-		//return base64_encode(file_get_contents($image));
-		
-	}
 	
-	function set_curl_options( $curlHandle, $options = array() ){
+	/**
+	 * MIME Types allowed in upload form
+	 * 
+	 * Passing this method an array of image attributes will set all properties to an object
+	 *  
+	 * @param array $mimeTypes
+	 *    An array of mime types in the format 'image/*' allowed by your application's script
+	 *         	 
+	 */
+	 public function set_allowed_mime_types( $mimeTypes ){
+		 
+		 $this->allowed_mime_types = $mimeTypes;
+	
+	 }
+	 
+	 
+	 /**
+	 * Check MIME type of a specific image
+	 * 
+	 * Pass this method any mime type string in the format image/* to check if it is allowed
+	 *  
+	 * @param str $type
+	 *    A string defining a mime type
+	 *
+	 * @return boolean 
+	 *	  Returns true if mime type is allowed, False if not allowed
+	 *         	 
+	 */
+	 public function check_mime_types( $type ){
 		
-		if( !empty( $options ) && is_array( $options )){
+		$mimes = $this->allowed_mime_types;
 		
-			foreach($options as $k => $option){
-								
-				curl_setopt( $curlHandle, $k, $option);
-				 
+		foreach($mimes as $mime){
+		
+			if($mime == $type){
+			
+				return true;
+				
+			} else {
+					
+				return false;
+				
 			}
-			
-		} else {
-			
-			return false;
-		
 		}
-	}
-
-}
+	 
+	 }
+	
+} // END IMGUR UPLOAD CLASS
 
 
 
