@@ -29,7 +29,6 @@ class imgurUpload {
 	 *    client id received from registering an application with imgur
 	 *
 	 * @throws
-	 *         	 
 	 */
 	public function set_client_key( $id ){
 		$matchId = preg_match( '/^[A-Za-z0-9]*$/', $id ); 
@@ -48,7 +47,6 @@ class imgurUpload {
 	 *  
 	 * @param array $imgattr
 	 *    This can be an array from a multipart form, or an array built from a form that accepts a URL and image details
-	 *         	 
 	 */
 	public function set_image_attributes( $imgattr = array() ){
 	
@@ -64,7 +62,6 @@ class imgurUpload {
 	 *  
 	 * @param array $mimeTypes
 	 *    An array of mime types in the format 'image/*' allowed by your application's script
-	 *         	 
 	 */
 	 public function set_allowed_mime_types( $mimeTypes ){
 		 
@@ -83,7 +80,6 @@ class imgurUpload {
 	 *
 	 * @return boolean 
 	 *	  Returns true if mime type is allowed, False if not allowed
-	 *         	 
 	 */
 	 public function check_mime_types( $type ){
 		
@@ -103,6 +99,85 @@ class imgurUpload {
 		}
 	 
 	 }
+	 
+	 
+	  /**
+	 * Set the maximum file size for uploads
+	 * 
+	 * Pass this method a int of maximum file size in kilobytes
+	 *  
+	 * @param int $args
+	 *    An int of filesize in kilobytes
+	 */
+	 public function set_max_file_size( $args ){
+	 
+	 	$this->max_image_size = $args;
+	 
+	 }
+	 
+	 
+	  /**
+	 * Check file upload for compliance for max file size
+	 * 
+	 * Pass this method a int of file size of an image to check it against the file size allowed
+	 *  
+	 * @param int $filesize
+	 *    An int of filesize in kilobytes
+	 *
+	 * @return boolean true
+	 *	  Returns true if image is less than allowed file size
+	 *
+	 */
+	 public function check_image_file_size( $filesize ){
+		 
+	 	if( $filesize <= $this->max_image_size ){
+			
+			return true;
+			
+		} else {
+		
+			return false;
+			
+		}
+	 
+	 }
+	 
+	 
+	 /**
+	 * Get image file contents, then base64 encode file stream
+	 *
+	 * @param object $image
+	 *	  Pass this method an image object defined in imgurUpload class
+	 *
+	 */
+	 public function encode_image( $image ){
+		 
+		if( is_object( $image ) && $image->tmp_name == '' ){
+	 		
+			$image = base64_encode(file_get_contents($image->image_attr->tmp_name));
+			 
+		} else {
+		
+			throw new Exception('Image data is not an object');	
+			
+		}
+	 
+	 }
+	 
+	 
+	  /**
+	 * Start cURL request
+	 *
+	 * @return object $cURL handle
+	 *	  Returns true if image is less than allowed file size
+	 *
+	 */
+	 public function start_curl_request(){
+		 
+		 
+		 
+	 }
+	 
 	
 } // END IMGUR UPLOAD CLASS
 
