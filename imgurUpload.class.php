@@ -42,10 +42,14 @@ class imgurUpload {
 	 *  
 	 * @param array $imgattr
 	 *    This can be an array from a multipart form, or an array built from a form that accepts a URL and image details
+	 *
+	 * @return object $image_attr
 	 */
 	public function set_image_attributes( $imgattr = array() ){
 	
 		$this->image_attr = (object) $imgattr;
+		
+		return $this->image_attr;
 				
 	}
 	
@@ -146,19 +150,12 @@ class imgurUpload {
 	 *
 	 */
 	 public function encode_image( $image ){
-		 
 		if( is_object( $image ) && $image->tmp_name != '' ){
-	 		
 			$image = base64_encode(file_get_contents($image->image_attr->tmp_name));
-			
 			return $image;
-			 
 		} else {
-		
 			throw new Exception('No image data received');	
-			
 		}
-	 
 	 }
 	 
 	 
@@ -173,13 +170,11 @@ class imgurUpload {
 	 *
 	 */
 	 public function set_curl_options( $curlHandle, $image ){
-		 
 		 curl_setopt($curlHandle, CURLOPT_URL, $this->imgur_endpoint );
 		 curl_setopt($curlHandle, CURLOPT_POST, TRUE);
 		 curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, TRUE);
 		 curl_setopt($curlHandle, CURLOPT_HTTPHEADER, array( 'Authorization: Client-ID ' . $this->client_id ));
 		 curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array( 'image' => base64_encode($image) ));
-		 
 	 }
 	 
 	 
@@ -196,29 +191,17 @@ class imgurUpload {
 	 *
 	 */
 	 public function handle_curl_response( $curlReply, $returnType ){
-		 
 		 if( $curlReply ){
-			 
 			 if( $returnType == 'object' ){
-			 
-			 	$data = $this->response_data = (object) json_decode( $curlReply );
-			 
+			 	$this->response_data = (object) json_decode( $curlReply );
 			 } else {
-				 
-				$data = $this->reponse_data = $curlReply;
-				 
+				$this->reponse_data = $curlReply;
 			 }
-			 
 		 } else {
-			
-			$data = '{ }'; 
-			 
+			$this->reponse_data = '{ }'; 
 		 }
-		 
-		 return $data;
-			 	 
+		 return $this->reponse_data;
 	 }
-	 
 	
 } // END IMGUR UPLOAD CLASS
 
