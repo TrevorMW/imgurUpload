@@ -13,13 +13,8 @@ class imgurUpload {
 	public $image_attr;
 	public $allowed_mime_types;
 	public $max_image_size;
+	public $response_data;
 
-
-	public function __construct(){ 
-		
-	}
-	
-	
 	/**
 	 * Imgur Client ID 
 	 * 
@@ -152,13 +147,15 @@ class imgurUpload {
 	 */
 	 public function encode_image( $image ){
 		 
-		if( is_object( $image ) && $image->tmp_name == '' ){
+		if( is_object( $image ) && $image->tmp_name != '' ){
 	 		
 			$image = base64_encode(file_get_contents($image->image_attr->tmp_name));
+			
+			return $image;
 			 
 		} else {
 		
-			throw new Exception('Image data is not an object');	
+			throw new Exception('No image data received');	
 			
 		}
 	 
@@ -166,22 +163,94 @@ class imgurUpload {
 	 
 	 
 	  /**
-	 * Start cURL request
+	 * Set cURL request options
 	 *
-	 * @return object $cURL handle
-	 *	  Returns true if image is less than allowed file size
+	 * @param object $curlHandle
+	 *
+	 * @param object $image
+	 *
+	 *
 	 *
 	 */
-	 public function start_curl_request(){
+	 public function set_curl_options( $curlHandle, $image ){
 		 
+		 curl_setopt($curlHandle, CURLOPT_URL, $this->imgur_endpoint );
+		 curl_setopt($curlHandle, CURLOPT_POST, TRUE);
+		 curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, TRUE);
+		 curl_setopt($curlHandle, CURLOPT_HTTPHEADER, array( 'Authorization: Client-ID ' . $this->client_id ));
+		 curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array( 'image' => base64_encode($image) ));
 		 
+	 }
+	 
+	 
+	 /**
+	 * Set cURL request options
+	 *
+	 * @param json Object $curlReply
+	 *
+	 * @param string $returnType
+	 *		Type of data to return. Can be a string of 'json' or 'object' 
+	 *
+	 * @return $data 
+	 *
+	 *
+	 */
+	 public function handle_curl_response( $curlReply, $returnType ){
 		 
+		 if( $curlReply ){
+			 
+			 if( $returnType == 'object' ){
+			 
+			 	$data = $this->response_data = (object) json_decode( $curlReply );
+			 
+			 } else {
+				 
+				$data = $this->reponse_data = $curlReply;
+				 
+			 }
+			 
+		 } else {
+			
+			$data = '{ }'; 
+			 
+		 }
+		 
+		 return $data;
+			 	 
 	 }
 	 
 	
 } // END IMGUR UPLOAD CLASS
 
+/*$imageData = array( 'name' => 'test.jpg',
+					'type' => 'image/jpeg',
+					'tmp_name' => '/tmp/nsl54Gs',
+					'error' => 0,
+					'size' => 1715 );
+					
+$mimes = array('image/jpeg','image/jpg','image/gif','image/png');	
+$upload = new imgurUpload();
+$upload->set_client_key('9c616d70834d15a');
+$upload->set_image_attributes($imageData);	
+$upload->set_allowed_mime_types($mimes);
+$upload->set_max_file_size(1500);
+$result = $upload->check_mime_types($upload->image_attr->type);
+$sizeCheck = $upload->check_image_file_size( $upload->image_attr->type);	
 
+if( $result == true && $sizeCheck == true ){ 	
+	$curl = curl_init();	
+	$upload->set_curl_options( $curl, $afasdfg );
+	$curl = curl_exec();
+	$curlResponse = $upload->handle_curl_response( $curl );
+	echo $curlResponse;
+}
+ */
 
-
+	
 ?>
+
+
+
+
+
+
