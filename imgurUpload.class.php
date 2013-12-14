@@ -23,7 +23,6 @@ class imgurUpload {
 	 * @param str $id
 	 *    client id received from registering an application with imgur
 	 *
-	 * @throws
 	 */
 	public function set_client_key( $id ){
 		$matchId = preg_match( '/^[A-Za-z0-9]*$/', $id ); 
@@ -46,11 +45,8 @@ class imgurUpload {
 	 * @return object $image_attr
 	 */
 	public function set_image_attributes( $imgattr = array() ){
-	
 		$this->image_attr = (object) $imgattr;
-		
 		return $this->image_attr;
-				
 	}
 	
 	
@@ -63,9 +59,7 @@ class imgurUpload {
 	 *    An array of mime types in the format 'image/*' allowed by your application's script
 	 */
 	 public function set_allowed_mime_types( $mimeTypes ){
-		 
 		 $this->allowed_mime_types = $mimeTypes;
-	
 	 }
 	 
 	 
@@ -81,22 +75,14 @@ class imgurUpload {
 	 *	  Returns true if mime type is allowed, False if not allowed
 	 */
 	 public function check_mime_types( $type ){
-		
 		$mimes = $this->allowed_mime_types;
-		
 		foreach($mimes as $mime){
-		
 			if($mime == $type){
-			
 				return true;
-				
 			} else {
-					
 				return false;
-				
 			}
 		}
-	 
 	 }
 	 
 	 
@@ -109,9 +95,7 @@ class imgurUpload {
 	 *    An int of filesize in kilobytes
 	 */
 	 public function set_max_file_size( $args ){
-	 
 	 	$this->max_image_size = $args;
-	 
 	 }
 	 
 	 
@@ -128,17 +112,11 @@ class imgurUpload {
 	 *
 	 */
 	 public function check_image_file_size( $filesize ){
-		 
 	 	if( $filesize <= $this->max_image_size ){
-			
 			return true;
-			
 		} else {
-		
 			return false;
-			
 		}
-	 
 	 }
 	 
 	 
@@ -195,12 +173,12 @@ class imgurUpload {
 			 if( $returnType == 'object' ){
 			 	$this->response_data = (object) json_decode( $curlReply );
 			 } else {
-				$this->reponse_data = $curlReply;
+				$this->response_data = $curlReply;
 			 }
 		 } else {
-			$this->reponse_data = '{ }'; 
+			$this->response_data = '{ }'; 
 		 }
-		 return $this->reponse_data;
+		 return $this->response_data;
 	 }
 	
 } // END IMGUR UPLOAD CLASS
