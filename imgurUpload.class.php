@@ -9,7 +9,7 @@
 class imgurUpload {
 
   public $client_id;
-  public static $imgur_endpoint = 'https://api.imgur.com/3/upload.json';
+  public $imgur_endpoint = 'https://api.imgur.com/3/upload.json';
   public $image_attr;
   public $allowed_mime_types;
   public $max_image_size;
@@ -125,7 +125,7 @@ class imgurUpload {
    *	  Pass this method an image object defined in imgurUpload class
    *
    */
-  public function encode_image( $image ){ //var_dump($image->tmp_name);
+  public function encode_image( $image ){
     if( is_object( $image ) && $image->tmp_name != '' ){
       return base64_encode(file_get_contents($image->tmp_name));
     } else {
@@ -149,7 +149,7 @@ class imgurUpload {
     curl_setopt($curlHandle, CURLOPT_POST, TRUE);
     curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($curlHandle, CURLOPT_HTTPHEADER, array( 'Authorization: Client-ID ' . $this->client_id ));
-    curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array( 'image' => base64_encode($image) ));
+    curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array( 'image' => $image ));
   }
 
 
